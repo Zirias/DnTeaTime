@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeaTimer.Contracts", "TeaTimer.Contracts\TeaTimer.Contracts.csproj", "{0AAD60D6-8735-4EB6-9D30-716C65A7D650}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTypes", "CoreTypes\CoreTypes.csproj", "{BF562F15-A7BB-4288-8E76-C52A1F812A45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeaTimer.STTimer", "TeaTimer.STTimer\TeaTimer.STTimer.csproj", "{9306058A-28B3-416B-916B-F7D71A86C2DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormsFrontend", "FormsFrontend\FormsFrontend.csproj", "{AFCF2032-BA1A-419C-BF1D-DAA542C6145E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeaTimer.RegistryRepository", "TeaTimer.RegistryRepository\TeaTimer.RegistryRepository.csproj", "{2DD05BA9-BAF1-42C7-831B-FFB21AFCDA96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "graphics", "graphics", "{5F28EFCC-B74C-4909-A841-C4511C0C232A}"
+	ProjectSection(SolutionItems) = preProject
+		graphics\icon.xcf = graphics\icon.xcf
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D21C2DA8-D08D-4636-8406-B08715821BE5}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0AAD60D6-8735-4EB6-9D30-716C65A7D650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AAD60D6-8735-4EB6-9D30-716C65A7D650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AAD60D6-8735-4EB6-9D30-716C65A7D650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AAD60D6-8735-4EB6-9D30-716C65A7D650}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF562F15-A7BB-4288-8E76-C52A1F812A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF562F15-A7BB-4288-8E76-C52A1F812A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF562F15-A7BB-4288-8E76-C52A1F812A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF562F15-A7BB-4288-8E76-C52A1F812A45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9306058A-28B3-416B-916B-F7D71A86C2DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9306058A-28B3-416B-916B-F7D71A86C2DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9306058A-28B3-416B-916B-F7D71A86C2DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9306058A-28B3-416B-916B-F7D71A86C2DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFCF2032-BA1A-419C-BF1D-DAA542C6145E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFCF2032-BA1A-419C-BF1D-DAA542C6145E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFCF2032-BA1A-419C-BF1D-DAA542C6145E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFCF2032-BA1A-419C-BF1D-DAA542C6145E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DD05BA9-BAF1-42C7-831B-FFB21AFCDA96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DD05BA9-BAF1-42C7-831B-FFB21AFCDA96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DD05BA9-BAF1-42C7-831B-FFB21AFCDA96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DD05BA9-BAF1-42C7-831B-FFB21AFCDA96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

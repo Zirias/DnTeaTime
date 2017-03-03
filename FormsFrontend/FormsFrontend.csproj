@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.props" Condition="Exists('..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AFCF2032-BA1A-419C-BF1D-DAA542C6145E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PalmenIt.dntt.FormsFrontend</RootNamespace>
+    <AssemblyName>DnTeaTime</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>idle.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="App.cs" />
+    <Compile Include="IconExtensions.cs" />
+    <Compile Include="ITrayApp.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Setup.cs" />
+    <Compile Include="SetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetupForm.Designer.cs">
+      <DependentUpon>SetupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TrayAppContext.cs" />
+    <EmbeddedResource Include="AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="SetupForm.resx">
+      <DependentUpon>SetupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="ILMerge.props">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoreTypes\CoreTypes.csproj">
+      <Project>{BF562F15-A7BB-4288-8E76-C52A1F812A45}</Project>
+      <Name>CoreTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TeaTimer.Contracts\TeaTimer.Contracts.csproj">
+      <Project>{0aad60d6-8735-4eb6-9d30-716c65a7d650}</Project>
+      <Name>TeaTimer.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TeaTimer.RegistryRepository\TeaTimer.RegistryRepository.csproj">
+      <Project>{2dd05ba9-baf1-42c7-831b-ffb21afcda96}</Project>
+      <Name>TeaTimer.RegistryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TeaTimer.STTimer\TeaTimer.STTimer.csproj">
+      <Project>{9306058a-28b3-416b-916b-f7d71a86c2dc}</Project>
+      <Name>TeaTimer.STTimer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="active.ico" />
+    <EmbeddedResource Include="idle.ico" />
+    <Content Include="ILMergeOrder.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.props'))" />
+    <Error Condition="!Exists('..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.targets'))" />
+  </Target>
+  <Import Project="..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.targets" Condition="Exists('..\packages\MSBuild.ILMerge.Task.1.0.5\build\MSBuild.ILMerge.Task.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
