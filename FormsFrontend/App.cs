@@ -2,7 +2,6 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using System.Media;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -11,6 +10,7 @@ namespace PalmenIt.dntt.FormsFrontend
     internal class App : ITrayApp
     {
         private readonly NotifyIcon _notifyIcon;
+        private readonly Notification _notification;
         private readonly SetupForm _setupForm;
         private readonly AboutForm _aboutForm;
         private readonly Setup _setup;
@@ -57,6 +57,8 @@ namespace PalmenIt.dntt.FormsFrontend
                     mi.Invoke(_notifyIcon, null);
                 }
             };
+
+            _notification = new Notification(_notifyIcon, _activeIcon);
 
             SetIcon(_idleIcon);
         }
@@ -113,11 +115,9 @@ namespace PalmenIt.dntt.FormsFrontend
 
         private void ShowTeaNotification(TeaTimerDefinition value)
         {
-            _notifyIcon.ShowBalloonTip(8000,
+            _notification.ShowNotification(
                 string.Format("{0} is ready.", value.Name),
-                string.Format("It brewed for {0} minutes.", value.Time),
-                ToolTipIcon.Info);
-            SystemSounds.Beep.Play();
+                string.Format("It brewed for {0} minutes.", value.Time));
         }
 
         public void Dispose()
