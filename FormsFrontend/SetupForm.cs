@@ -12,6 +12,7 @@ namespace PalmenIt.dntt.FormsFrontend
         private const string _saveToolTipText = "Unable to modify this tea while a timer for it is running";
         private readonly Setup _setup;
         private readonly ToolTip _saveToolTip;
+        private readonly ContextMenu _contextMenu;
         private bool _toolTipShown;
 
         internal SetupForm(Setup setup)
@@ -28,13 +29,20 @@ namespace PalmenIt.dntt.FormsFrontend
             TeaRepositoryView.MouseDown += TeaRepositoryView_MouseDown;
             TeaRepositoryView.DragOver += TeaRepositoryView_DragOver;
             TeaRepositoryView.DragDrop += TeaRepositoryView_DragDrop;
-            TeaRepositoryView.ContextMenu = new ContextMenu();
-            TeaRepositoryView.ContextMenu.MenuItems.Add("Delete", TeaRepositoryView_DeleteItem);
+
+            _contextMenu = new ContextMenu();
+            _contextMenu.MenuItems.Add("Delete", TeaRepositoryView_DeleteItem);
 
             _toolTipShown = false;
             ButtonsPanel.MouseMove += ButtonsPanel_MouseMove;
             SaveBtn.Click += SaveBtn_Click;
             CancelBtn.Click += CancelBtn_Click;
+        }
+
+        private void _contextMenu_Popup(object sender, EventArgs e)
+        {
+            var index = TeaRepositoryView.SelectedIndex;
+            if (index < 0 || index > TeaRepositoryView.Items.Count - 2) TeaRepositoryView.ContextMenu = null;
         }
 
         private void UpdateFormFieldsFromRepositoryView(int itemIndex)
@@ -50,6 +58,7 @@ namespace PalmenIt.dntt.FormsFrontend
                 CancelBtn.Enabled = true;
                 SaveBtn.Text = "Save";
                 SaveBtn.Enabled = !_setup.Handles.ContainsKey(entry);
+                TeaRepositoryView.ContextMenu = _contextMenu;
             }
             else
             {
@@ -91,17 +100,18 @@ namespace PalmenIt.dntt.FormsFrontend
         private void TeaRepositoryView_MouseDown(object sender, MouseEventArgs e)
         {
             var pointedIndex = TeaRepositoryView.IndexFromPoint(e.Location);
+
+            if (pointedIndex < 0 || pointedIndex > TeaRepositoryView.Items.Count - 2) TeaRepositoryView.ContextMenu = null;
+
+            TeaRepositoryView.SelectedIndex = pointedIndex;
+
             if (pointedIndex < 0) return;
 
-            if (e.Button == MouseButtons.Right)
-            {
-                TeaRepositoryView.ContextMenu.Show(TeaRepositoryView, e.Location);
-            }
-            else
-            {
-                UpdateFormFieldsFromRepositoryView(pointedIndex);
+            UpdateFormFieldsFromRepositoryView(pointedIndex);
 
-                if (pointedIndex != TeaRepositoryView.Items.Count - 1)
+            if (pointedIndex != TeaRepositoryView.Items.Count - 1)
+            {
+                if (e.Button != MouseButtons.Right)
                 {
                     TeaRepositoryView.DoDragDrop(pointedIndex, DragDropEffects.Move);
                 }
