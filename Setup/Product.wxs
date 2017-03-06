@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="DnTeaTime" Language="1033" Version="0.9.0.0" Manufacturer="PalmenIt" UpgradeCode="68c7f574-7ac3-4ce4-bc13-58ff8ceb20b4">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="icon.ico" SourceFile="$(var.FormsFrontend.ProjectDir)idle.ico" />
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+		<Feature Id="ProductFeature" Title="DnTeaTime" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="ProductShortcuts" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="LocalAppDataFolder">
+        <Directory Id="INSTALLFOLDER" Name="DnTeaTime" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="SHORTCUTFOLDER" Name="PalmenIt">
+        </Directory>
+      </Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="ProductComponent" Guid="{9EBF7DFE-CC92-43FA-AD71-24AD5504E051}">
+        <File Source="$(var.FormsFrontend.TargetPath)" />
+        <RemoveFolder Id="CleanUpProduct" Directory="INSTALLFOLDER" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\PalmenIt\DnTeaTime" Name="Installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+		</ComponentGroup>
+
+    <ComponentGroup Id="ProductShortcuts" Directory="SHORTCUTFOLDER">
+      <Component Id="ProductShortcut" Guid="{8E3C3E3B-8922-4A9C-9593-D22C02AFA986}">
+        <Shortcut Id="ProductStartMenuShortcut"
+                  Name="$(var.FormsFrontend.TargetName)"
+                  Description="DotNet Tea Timer"
+                  Target="[INSTALLFOLDER]$(var.FormsFrontend.TargetFileName)"
+                  WorkingDirectory="INSTALLFOLDER">
+          <ShortcutProperty Key="{9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3}, 5" Value="PalmenIt.[ProductName]" />
+        </Shortcut>
+        <RemoveFolder Id="CleanUpShortCut" Directory="SHORTCUTFOLDER" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\PalmenIt\DnTeaTime" Name="Installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
