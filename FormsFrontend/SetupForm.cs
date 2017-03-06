@@ -77,7 +77,11 @@ namespace PalmenIt.dntt.FormsFrontend
         {
             var location = TeaRepositoryView.PointToClient(new Point(e.X, e.Y));
             int draggedIndex = TeaRepositoryView.IndexFromPoint(location);
-            if (draggedIndex < 0) draggedIndex = TeaRepositoryView.Items.Count - 2;
+            if (draggedIndex < 0 || draggedIndex == TeaRepositoryView.Items.Count - 1)
+            {
+                return;
+            }
+
             var fromIndex = (int)e.Data.GetData(typeof(int));
             if (fromIndex == draggedIndex) return;
             var item = TeaRepositoryView.Items[fromIndex];
@@ -94,27 +98,35 @@ namespace PalmenIt.dntt.FormsFrontend
 
         private void TeaRepositoryView_DragOver(object sender, DragEventArgs e)
         {
-            e.Effect = DragDropEffects.Move;
+            var location = TeaRepositoryView.PointToClient(new Point(e.X, e.Y));
+            int draggedIndex = TeaRepositoryView.IndexFromPoint(location);
+            if (draggedIndex < 0 || draggedIndex == TeaRepositoryView.Items.Count - 1)
+            {
+                e.Effect = DragDropEffects.None;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.Move;
+            }
         }
 
         private void TeaRepositoryView_MouseDown(object sender, MouseEventArgs e)
         {
             var pointedIndex = TeaRepositoryView.IndexFromPoint(e.Location);
 
-            if (pointedIndex < 0 || pointedIndex > TeaRepositoryView.Items.Count - 2) TeaRepositoryView.ContextMenu = null;
-
+            if (pointedIndex < 0 || pointedIndex > TeaRepositoryView.Items.Count - 2)
+            {
+                TeaRepositoryView.ContextMenu = null;
+                pointedIndex = TeaRepositoryView.Items.Count - 1;
+            }
             TeaRepositoryView.SelectedIndex = pointedIndex;
-
-            if (pointedIndex < 0) return;
 
             UpdateFormFieldsFromRepositoryView(pointedIndex);
 
-            if (pointedIndex != TeaRepositoryView.Items.Count - 1)
+            if (pointedIndex != TeaRepositoryView.Items.Count - 1
+                && e.Button != MouseButtons.Right)
             {
-                if (e.Button != MouseButtons.Right)
-                {
-                    TeaRepositoryView.DoDragDrop(pointedIndex, DragDropEffects.Move);
-                }
+                TeaRepositoryView.DoDragDrop(pointedIndex, DragDropEffects.Move);
             }
         }
 
