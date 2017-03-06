@@ -67,6 +67,8 @@ namespace PalmenIt.dntt.TeaTimer.RegistryRepository
                 .Where(x => x.HasValue)
                 .Select(x => x.Value)
                 .ToDictionary(x => x.Key, x => x.Value);
+
+            NormalizePositions();
         }
 
         private static void WriteRegistryKey(RegistryKey key, string name, int minutes, int seconds, int pos)
@@ -77,6 +79,33 @@ namespace PalmenIt.dntt.TeaTimer.RegistryRepository
             key.SetValue("Pos", pos, RegistryValueKind.DWord);
         }
 
+        private void NormalizePositions()
+        {
+            var metadatalist = _entries.Values.OrderBy(md => md.Position).ToArray();
+            var mustWrite = false;
+            for (int i = 0; i < metadatalist.Length; ++i)
+            {
+                var md = metadatalist[i];
+                if (md.Position != i)
+                {
+                    metadatalist[i].Position = i;
+                    mustWrite = true;
+                }
+            }
+
+            if (mustWrite)
+            {
+                foreach (var entry in _entries.Keys)
+                {
+                    var key = _reg.OpenSubKey(_entries[entry].Key.ToString("B"), true);
+                    if (key != null)
+                    {
+                        key.SetValue("Pos", _entries[entry].Position, RegistryValueKind.DWord);
+                    }
+                }
+            }
+        }
+
         public IEntry<TeaTimerDefinition> Add(TeaTimerDefinition value)
         {
             var entry = new Entry<TeaTimerDefinition>(value);
@@ -84,6 +113,7 @@ namespace PalmenIt.dntt.TeaTimer.RegistryRepository
             _entries.Add(entry, new EntryMetaData() { Position = pos });
             var key = _reg.CreateSubKey(_entries[entry].Key.ToString("B"));
             WriteRegistryKey(key, value.Name, value.Time.Minute, value.Time.Second, pos);
+            NormalizePositions();
             return entry;
         }
 
@@ -117,7 +147,7 @@ namespace PalmenIt.dntt.TeaTimer.RegistryRepository
             md.Position = position;
             foreach (var entry in _entries.Keys)
             {
-                var key = _reg.OpenSubKey(_entries[entry].Key.ToString("B"));
+                var key = _reg.OpenSubKey(_entries[entry].Key.ToString("B"), true);
                 if (key != null)
                 {
                     key.SetValue("Pos", _entries[entry].Position, RegistryValueKind.DWord);
@@ -129,6 +159,7 @@ namespace PalmenIt.dntt.TeaTimer.RegistryRepository
         {
             _reg.DeleteSubKeyTree(_entries[value].Key.ToString("B"));
             _entries.Remove(value);
+            NormalizePositions();
         }
 
         public void Update(IEntry<TeaTimerDefinition> value)

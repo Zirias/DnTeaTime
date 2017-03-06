@@ -25,7 +25,9 @@ namespace PalmenIt.dntt.FormsFrontend
             TeaRepositoryView.Items.AddRange(_setup.Repository.ToArray());
             TeaRepositoryView.Items.Add("<New>");
             TeaRepositoryView.SelectedIndex = TeaRepositoryView.Items.Count - 1;
-            TeaRepositoryView.SelectedIndexChanged += TeaRepositoryView_SelectedIndexChanged;
+            TeaRepositoryView.MouseDown += TeaRepositoryView_MouseDown;
+            TeaRepositoryView.DragOver += TeaRepositoryView_DragOver;
+            TeaRepositoryView.DragDrop += TeaRepositoryView_DragDrop;
             TeaRepositoryView.ContextMenu = new ContextMenu();
             TeaRepositoryView.ContextMenu.MenuItems.Add("Delete", TeaRepositoryView_DeleteItem);
 
@@ -33,6 +35,77 @@ namespace PalmenIt.dntt.FormsFrontend
             ButtonsPanel.MouseMove += ButtonsPanel_MouseMove;
             SaveBtn.Click += SaveBtn_Click;
             CancelBtn.Click += CancelBtn_Click;
+        }
+
+        private void UpdateFormFieldsFromRepositoryView(int itemIndex)
+        {
+            var item = TeaRepositoryView.Items[itemIndex];
+            if (item is IEntry<TeaTimerDefinition>)
+            {
+                var entry = (IEntry<TeaTimerDefinition>)item;
+                NameTextBox.Text = entry.Value.Name;
+                MinuteUpDown.Value = entry.Value.Time.Minute;
+                SecondUpDown.Value = entry.Value.Time.Second;
+                TeaEditGroup.Text = entry.Value.Name;
+                CancelBtn.Enabled = true;
+                SaveBtn.Text = "Save";
+                SaveBtn.Enabled = !_setup.Handles.ContainsKey(entry);
+            }
+            else
+            {
+                NameTextBox.Text = string.Empty;
+                MinuteUpDown.Value = 4;
+                SecondUpDown.Value = 0;
+                TeaEditGroup.Text = item.ToString();
+                CancelBtn.Enabled = false;
+                SaveBtn.Enabled = true;
+                SaveBtn.Text = "Create";
+            }
+            NameTextBox.Focus();
+        }
+
+        private void TeaRepositoryView_DragDrop(object sender, DragEventArgs e)
+        {
+            var location = TeaRepositoryView.PointToClient(new Point(e.X, e.Y));
+            int draggedIndex = TeaRepositoryView.IndexFromPoint(location);
+            if (draggedIndex < 0) draggedIndex = TeaRepositoryView.Items.Count - 2;
+            var fromIndex = (int)e.Data.GetData(typeof(int));
+            if (fromIndex == draggedIndex) return;
+            var item = TeaRepositoryView.Items[fromIndex];
+            if (item is IEntry<TeaTimerDefinition>)
+            {
+                var entry = (IEntry<TeaTimerDefinition>)item;
+                _setup.Repository.MoveTo(entry, draggedIndex);
+                TeaRepositoryView.Items.Clear();
+                TeaRepositoryView.Items.AddRange(_setup.Repository.ToArray());
+                TeaRepositoryView.Items.Add("<New>");
+                TeaRepositoryView.SelectedIndex = draggedIndex;
+            }
+        }
+
+        private void TeaRepositoryView_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void TeaRepositoryView_MouseDown(object sender, MouseEventArgs e)
+        {
+            var pointedIndex = TeaRepositoryView.IndexFromPoint(e.Location);
+            if (pointedIndex < 0) return;
+
+            if (e.Button == MouseButtons.Right)
+            {
+                TeaRepositoryView.ContextMenu.Show(TeaRepositoryView, e.Location);
+            }
+            else
+            {
+                UpdateFormFieldsFromRepositoryView(pointedIndex);
+
+                if (pointedIndex != TeaRepositoryView.Items.Count - 1)
+                {
+                    TeaRepositoryView.DoDragDrop(pointedIndex, DragDropEffects.Move);
+                }
+            }
         }
 
         protected override void OnShown(EventArgs e)
@@ -57,6 +130,7 @@ namespace PalmenIt.dntt.FormsFrontend
                     _setup.Repository.Remove(entry);
                     TeaRepositoryView.Items.RemoveAt(idx);
                     TeaRepositoryView.SelectedIndex = TeaRepositoryView.Items.Count - 1;
+                    UpdateFormFieldsFromRepositoryView(TeaRepositoryView.SelectedIndex);
                 }
             }
         }
@@ -83,6 +157,7 @@ namespace PalmenIt.dntt.FormsFrontend
             {
                 var entry = _setup.Repository.Add(newDefinition);
                 TeaRepositoryView.Items.Insert(TeaRepositoryView.Items.Count - 1, entry);
+                SaveBtn.Text = "Save";
             }
             TeaRepositoryView.SelectedIndex = idx;
             TeaRepositoryView.EndUpdate();
@@ -127,33 +202,6 @@ namespace PalmenIt.dntt.FormsFrontend
             base.OnFormClosing(e);
             e.Cancel = true;
             Hide();
-        }
-
-        private void TeaRepositoryView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (TeaRepositoryView.SelectedIndex < 0) return;
-            var item = TeaRepositoryView.Items[TeaRepositoryView.SelectedIndex];
-            if (item is IEntry<TeaTimerDefinition>)
-            {
-                var entry = (IEntry<TeaTimerDefinition>) item;
-                NameTextBox.Text = entry.Value.Name;
-                MinuteUpDown.Value = entry.Value.Time.Minute;
-                SecondUpDown.Value = entry.Value.Time.Second;
-                TeaEditGroup.Text = entry.Value.Name;
-                CancelBtn.Enabled = true;
-                SaveBtn.Text = "Save";
-                SaveBtn.Enabled = !_setup.Handles.ContainsKey(entry);
-            }
-            else
-            {
-                NameTextBox.Text = string.Empty;
-                MinuteUpDown.Value = 4;
-                SecondUpDown.Value = 0;
-                TeaEditGroup.Text = item.ToString();
-                CancelBtn.Enabled = false;
-                SaveBtn.Enabled = true;
-                SaveBtn.Text = "Create";
-            }
         }
 
         private void UpdateSaveButton()

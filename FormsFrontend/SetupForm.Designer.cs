@@ -73,6 +73,7 @@
             // 
             // TeaRepositoryView
             // 
+            this.TeaRepositoryView.AllowDrop = true;
             this.TeaRepositoryView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TeaRepositoryView.FormattingEnabled = true;
             this.TeaRepositoryView.Location = new System.Drawing.Point(0, 0);
