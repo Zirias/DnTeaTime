@@ -16,8 +16,10 @@ namespace PalmenIt.dntt.FormsFrontend
 
         private const string APPUSERMODELID = "PalmenIt.DnTeaTime";
         private const string TOASTFORMAT = "<toast><visual><binding template=\"ToastImageAndText02\">"
-            + "<image id=\"1\" src=\"{0}\" alt=\"DnTeaTime\"/><text id=\"1\">{1}</text>"
-            + "<text id=\"1\">{2}</text></binding></visual></toast>";
+            + "<image id=\"1\" src=\"{0}\" alt=\"DnTeaTime\"/>"
+            + "<text id=\"1\">{1}</text><text id=\"2\">{2}</text>"
+            + "<audio src=\"ms-winsoundevent:Notification.Reminder\" loop=\"false\"/>"
+            + "</binding></visual></toast>";
 
         public Notification(NotifyIcon notifyIcon, Icon notificationIcon)
         {
