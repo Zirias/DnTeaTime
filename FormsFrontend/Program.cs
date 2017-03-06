@@ -19,6 +19,22 @@ namespace PalmenIt.dntt.FormsFrontend
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
+                if (VersionCheck.HasWinRT && !InstalledCheck.IsInstalled)
+                {
+                    if (MessageBox.Show(null,
+                        "You are running DnTeaTime directly without installing it." + Environment.NewLine +
+                        "Due to the way notifications work on Windows 8 and later," + Environment.NewLine +
+                        "You won't get notified when your tea is ready. Please" + Environment.NewLine +
+                        "install DnTeaTime first!" + Environment.NewLine +
+                        Environment.NewLine +
+                        "Click Cancel to exit now or OK to continue anyways.", "DnTeaTime Warning",
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2)
+                        == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+                }
+
                 var repository = new TeaTimerRepository();
                 if (repository.Count == 0)
                 {

@@ -25,15 +25,13 @@ namespace PalmenIt.dntt.FormsFrontend
         {
             _notifyIcon = notifyIcon;
             _notificationIcon = notificationIcon;
-
-            if (Environment.OSVersion.Version.Major < 6 || Environment.OSVersion.Version.Minor < 2)
+            if (VersionCheck.HasWinRT)
             {
-                // Balloon notification for Windows versions prior to 8.0 (NT 6.2)
-                _notificationAction = ShowBalloonNotification;
+                _notificationAction = ShowToastNotification;
             }
             else
             {
-                _notificationAction = ShowToastNotification;
+                _notificationAction = ShowBalloonNotification;
             }
         }
 

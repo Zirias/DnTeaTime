@@ -62,6 +62,7 @@
     </Compile>
     <Compile Include="App.cs" />
     <Compile Include="IconExtensions.cs" />
+    <Compile Include="InstalledCheck.cs" />
     <Compile Include="ITrayApp.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Program.cs" />
@@ -74,6 +75,7 @@
       <DependentUpon>SetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TrayAppContext.cs" />
+    <Compile Include="VersionCheck.cs" />
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
