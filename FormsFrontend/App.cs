@@ -24,6 +24,8 @@ namespace PalmenIt.dntt.FormsFrontend
 
         public App(ITeaTimerRepository timerRepository, ITeaTimerProcessor timerProcessor)
         {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+
             _setup = new Setup(timerRepository);
             _timerProcessor = timerProcessor;
 
@@ -47,7 +49,7 @@ namespace PalmenIt.dntt.FormsFrontend
             };
 
             _notifyIcon.ContextMenu = cm;
-            _notifyIcon.Text = "DnTeaTime";
+            _notifyIcon.Text = "DnTeaTime v" + version.ToString(2);
 
             _notifyIcon.MouseUp += (s, e) =>
             {
