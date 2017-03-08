@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Media;
+using System.Threading;
 using System.Windows.Forms;
 using Windows.Data.Xml.Dom;
 using Windows.UI.Notifications;
@@ -17,7 +19,7 @@ namespace PalmenIt.dntt.FormsFrontend
 
         private const string APPUSERMODELID = "PalmenIt.DnTeaTime";
         private const string TOASTFORMAT = "<toast><visual><binding template=\"ToastImageAndText02\">"
-            + "<image id=\"1\" src=\"{0}\" alt=\"DnTeaTime\"/>"
+            + "<image id=\"1\" src=\"file:///{0}\" alt=\"DnTeaTime\"/>"
             + "<text id=\"1\">{1}</text><text id=\"2\">{2}</text>"
             + "<audio src=\"ms-winsoundevent:Notification.Reminder\" loop=\"false\"/>"
             + "</binding></visual></toast>";
@@ -41,30 +43,59 @@ namespace PalmenIt.dntt.FormsFrontend
 
         private void ShowToastNotification(string title, string text)
         {
-            var imageFileName = Path.GetTempFileName();
+            var imageFileName = CreateTempPng();
             try
             {
-                _notificationIcon.SaveImageToFile(imageFileName, 48, 48, 32);
+                var image = _notificationIcon.ToBitmap(48, 48);
+                image.Save(imageFileName, ImageFormat.Png);
                 var toastXml = new XmlDocument();
-                toastXml.LoadXml(string.Format(TOASTFORMAT, "file:///" + imageFileName, title, text));
+                toastXml.LoadXml(string.Format(TOASTFORMAT, imageFileName, title, text));
                 var toast = new ToastNotification(toastXml);
                 ToastNotificationManager.CreateToastNotifier(APPUSERMODELID).Show(toast);
             }
             finally
             {
+                ThreadPool.QueueUserWorkItem(o =>
+                {
+                    try
+                    {
+                        Thread.Sleep(1000);
+                        File.Delete(imageFileName);
+                    }
+                    catch
+                    {
+                        // Can't delete temp file and can't do anything about it. Well.
+                    }
+                });
+            }
+        }
+
+        private static string CreateTempPng()
+        {
+            int attempt = 0;
+            var path = Path.GetTempPath();
+            while (true)
+            {
+                var filename = path + Guid.NewGuid().ToString() + ".png";
                 try
                 {
-                    File.Delete(imageFileName);
+                    using (new FileStream(filename, FileMode.CreateNew)) { }
+                    return filename;
                 }
-                catch
+                catch (IOException ex)
                 {
-                    // Can't delete temp file and can't do anything about it. Well.
+                    if (++attempt == 10)
+                        throw new IOException("No unique temporary file name is available.", ex);
                 }
             }
         }
 
         private void ShowFormsToastNotification(string title, string text)
         {
+            var imageFileName = CreateTempPng();
+            var image = _notificationIcon.ToBitmap(48, 48);
+            image.Save(imageFileName, ImageFormat.Png);
+
             _formsToast.Show(title, text, 15000);
             SystemSounds.Beep.Play();
         }

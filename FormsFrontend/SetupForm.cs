@@ -37,6 +37,9 @@ namespace PalmenIt.dntt.FormsFrontend
             ButtonsPanel.MouseMove += ButtonsPanel_MouseMove;
             SaveBtn.Click += SaveBtn_Click;
             CancelBtn.Click += CancelBtn_Click;
+            NameTextBox.TextChanged += (s, e) => CancelBtn.Enabled = true;
+            MinuteUpDown.ValueChanged += (s, e) => CancelBtn.Enabled = true;
+            SecondUpDown.ValueChanged += (s, e) => CancelBtn.Enabled = true;
         }
 
         private void _contextMenu_Popup(object sender, EventArgs e)
@@ -188,17 +191,16 @@ namespace PalmenIt.dntt.FormsFrontend
         private void CancelBtn_Click(object sender, EventArgs e)
         {
             var idx = TeaRepositoryView.SelectedIndex;
-            if (idx == TeaRepositoryView.Items.Count - 1)
-            {
-                NameTextBox.Text = string.Empty;
-                MinuteUpDown.Value = 4;
-                SecondUpDown.Value = 0;
-            }
-            else
+            if (idx != TeaRepositoryView.Items.Count - 1)
             {
                 TeaRepositoryView.SelectedIndex = TeaRepositoryView.Items.Count - 1;
+                SaveBtn.Text = "Create";
             }
+            NameTextBox.Text = string.Empty;
+            MinuteUpDown.Value = 4;
+            SecondUpDown.Value = 0;
             NameTextBox.Focus();
+            CancelBtn.Enabled = false;
         }
 
         private void ButtonsPanel_MouseMove(object sender, MouseEventArgs e)

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace PalmenIt.dntt.TeaTimer.RegistryRepository
 {
-    public class TeaTimerRepository : ITeaTimerRepository
+    public class TeaTimerRepository : ITeaTimerRepository, IDisposable
     {
         private class EntryMetaData
         {
@@ -28,6 +28,8 @@ namespace PalmenIt.dntt.TeaTimer.RegistryRepository
         private readonly Dictionary<IEntry<TeaTimerDefinition>, EntryMetaData> _entries;
         private readonly RegistryKey _reg;
 
+        private bool _disposed = false;
+
         public int Count
         {
             get
@@ -38,30 +40,35 @@ namespace PalmenIt.dntt.TeaTimer.RegistryRepository
 
         public TeaTimerRepository()
         {
-            _reg = Registry.CurrentUser
-                .CreateSubKey("Software")
-                .CreateSubKey("PalmenIt")
-                .CreateSubKey("DnTeaTime");
+            using (var sw = Registry.CurrentUser.CreateSubKey("Software"))
+            {
+                using (var palmenIt = sw.CreateSubKey("PalmenIt"))
+                {
+                    _reg = palmenIt.CreateSubKey("DnTeaTime");
+                }
+            }
 
             _entries = _reg.GetSubKeyNames()
                 .Select(x =>
                 {
-                    var key = _reg.OpenSubKey(x);
-                    try
+                    using (var key = _reg.OpenSubKey(x))
                     {
-                        var def = TeaTimerDefinition.Create(
-                            (string)key.GetValue("Name", "<unknown>"),
-                            (int)key.GetValue("Minutes", 4),
-                            (int)key.GetValue("Seconds", 0));
-                        if (def.IsError) return null;
-                        IEntry<TeaTimerDefinition> entry = new Entry<TeaTimerDefinition>(def);
-                        var meta = new EntryMetaData(Guid.Parse(x));
-                        meta.Position = (int)key.GetValue("Pos", 0);
-                        return new KeyValuePair<IEntry<TeaTimerDefinition>, EntryMetaData>(entry, meta);
-                    }
-                    catch
-                    {
-                        return (KeyValuePair<IEntry<TeaTimerDefinition>, EntryMetaData>?)null;
+                        try
+                        {
+                            var def = TeaTimerDefinition.Create(
+                                (string)key.GetValue("Name", "<unknown>"),
+                                (int)key.GetValue("Minutes", 4),
+                                (int)key.GetValue("Seconds", 0));
+                            if (def.IsError) return null;
+                            IEntry<TeaTimerDefinition> entry = new Entry<TeaTimerDefinition>(def);
+                            var meta = new EntryMetaData(Guid.Parse(x));
+                            meta.Position = (int)key.GetValue("Pos", 0);
+                            return new KeyValuePair<IEntry<TeaTimerDefinition>, EntryMetaData>(entry, meta);
+                        }
+                        catch
+                        {
+                            return (KeyValuePair<IEntry<TeaTimerDefinition>, EntryMetaData>?)null;
+                        }
                     }
                 })
                 .Where(x => x.HasValue)
@@ -97,10 +104,12 @@ namespace PalmenIt.dntt.TeaTimer.RegistryRepository
             {
                 foreach (var entry in _entries.Keys)
                 {
-                    var key = _reg.OpenSubKey(_entries[entry].Key.ToString("B"), true);
-                    if (key != null)
+                    using (var key = _reg.OpenSubKey(_entries[entry].Key.ToString("B"), true))
                     {
-                        key.SetValue("Pos", _entries[entry].Position, RegistryValueKind.DWord);
+                        if (key != null)
+                        {
+                            key.SetValue("Pos", _entries[entry].Position, RegistryValueKind.DWord);
+                        }
                     }
                 }
             }
@@ -147,10 +156,12 @@ namespace PalmenIt.dntt.TeaTimer.RegistryRepository
             md.Position = position;
             foreach (var entry in _entries.Keys)
             {
-                var key = _reg.OpenSubKey(_entries[entry].Key.ToString("B"), true);
-                if (key != null)
+                using (var key = _reg.OpenSubKey(_entries[entry].Key.ToString("B"), true))
                 {
-                    key.SetValue("Pos", _entries[entry].Position, RegistryValueKind.DWord);
+                    if (key != null)
+                    {
+                        key.SetValue("Pos", _entries[entry].Position, RegistryValueKind.DWord);
+                    }
                 }
             }
         }
@@ -164,17 +175,28 @@ namespace PalmenIt.dntt.TeaTimer.RegistryRepository
 
         public void Update(IEntry<TeaTimerDefinition> value)
         {
-            var key = _reg.OpenSubKey(_entries[value].Key.ToString());
-            if (key != null)
+            using (var key = _reg.OpenSubKey(_entries[value].Key.ToString("B"), true))
             {
-                WriteRegistryKey(key, value.Value.Name,
-                    value.Value.Time.Minute, value.Value.Time.Second, _entries[value].Position);
+                if (key != null)
+                {
+                    WriteRegistryKey(key, value.Value.Name,
+                        value.Value.Time.Minute, value.Value.Time.Second, _entries[value].Position);
+                }
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _reg.Dispose();
+                _disposed = true;
+            }
         }
     }
 }

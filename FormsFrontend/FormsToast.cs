@@ -12,13 +12,12 @@ namespace PalmenIt.dntt.FormsFrontend
         {
             private bool _isMouseOverToast = false;
             private bool _isMouseOverCloseButton = false;
-            private Rectangle _closeButtonRectangle = new Rectangle(0, 12, 14, 14);
+            private Rectangle _closeButtonRectangle = new Rectangle(0, 12, 13, 13);
             private string _title;
             private string _text;
 
             private readonly Color _toastBackgroundColor;
             private readonly Color _toastBorderColor;
-            private readonly Color _toastTileBackgroundColor;
             private readonly Color _toastTitleColor;
             private readonly Color _toastTextColor;
             private readonly Color _toastCloseColorDark;
@@ -38,7 +37,6 @@ namespace PalmenIt.dntt.FormsFrontend
 
                 _toastBackgroundColor = Color.FromArgb(unchecked((int)0xff1f1f1f));
                 _toastBorderColor = Color.FromArgb(unchecked((int)0xff484848));
-                _toastTileBackgroundColor = Color.FromArgb(unchecked((int)0xff29aecc));
                 _toastTitleColor = Color.White;
                 _toastTextColor = Color.FromArgb(unchecked((int)0xffa5a5a5));
                 _toastCloseColorDark = Color.FromArgb(unchecked((int)0xff6b6b6b));
@@ -73,18 +71,19 @@ namespace PalmenIt.dntt.FormsFrontend
                 var backgroundBrush = new SolidBrush(_toastBackgroundColor);
                 e.Graphics.FillRectangle(backgroundBrush, ClientRectangle);
                 var borderPen = new Pen(_toastBorderColor);
-                e.Graphics.DrawRectangle(borderPen, ClientRectangle);
+                var borderRectangle = ClientRectangle;
+                borderRectangle.Width -= 1;
+                borderRectangle.Height -= 1;
+                e.Graphics.DrawRectangle(borderPen, borderRectangle);
                 var titleSize = TextRenderer.MeasureText(Title, SystemFonts.CaptionFont);
                 var titlePoint = new Point(12, 12);
-                var textPoint = new Point(12, 16 + titleSize.Height);
+                var textPoint = new Point(12, 14 + titleSize.Height);
                 if (_toastImage != null)
                 {
                     titlePoint.X += 12 + _toastImage.Width;
                     textPoint.X += 12 + _toastImage.Width;
-                    var tileRectangle = new Rectangle(new Point(12, 12), _toastImage.Size);
-                    var tileBackgroundBrush = new SolidBrush(_toastTileBackgroundColor);
-                    e.Graphics.FillRectangle(tileBackgroundBrush, tileRectangle);
-                    e.Graphics.DrawImage(_toastImage, tileRectangle);
+                    var imageRectangle = new Rectangle(new Point(12, 12), _toastImage.Size);
+                    e.Graphics.DrawImage(_toastImage, imageRectangle);
                 }
                 TextRenderer.DrawText(e.Graphics, Title, SystemFonts.CaptionFont, titlePoint, _toastTitleColor);
                 TextRenderer.DrawText(e.Graphics, Text, SystemFonts.DefaultFont, textPoint, _toastTextColor);
@@ -102,16 +101,17 @@ namespace PalmenIt.dntt.FormsFrontend
                         dark = _toastCloseColorDark;
                         bright = _toastCloseColorBright;
                     }
-                    var backPen = new Pen(dark, 2f);
+                    var backPen = new Pen(dark, 2.6f);
+                    backPen.StartCap = LineCap.Triangle;
+                    backPen.EndCap = LineCap.Triangle;
                     var frontPen = new Pen(bright);
-                    var p1 = new Point(_closeButtonRectangle.Left + 2, _closeButtonRectangle.Top + 2);
-                    var p2 = new Point(_closeButtonRectangle.Right - 2, _closeButtonRectangle.Bottom - 2);
-                    var p3 = new Point(_closeButtonRectangle.Left + 2, _closeButtonRectangle.Bottom - 2);
-                    var p4 = new Point(_closeButtonRectangle.Right - 2, _closeButtonRectangle.Top + 2);
-                    e.Graphics.DrawLine(backPen, p1, p2);
-                    e.Graphics.DrawLine(backPen, p3, p4);
-                    e.Graphics.DrawLine(frontPen, p1, p2);
-                    e.Graphics.DrawLine(frontPen, p3, p4);
+                    var crossRectangle = _closeButtonRectangle;
+                    crossRectangle.Inflate(-2, -2);
+                    e.Graphics.DrawLine(backPen, crossRectangle.Left, crossRectangle.Top, crossRectangle.Right, crossRectangle.Bottom);
+                    e.Graphics.DrawLine(backPen, crossRectangle.Left, crossRectangle.Bottom, crossRectangle.Right, crossRectangle.Top);
+                    crossRectangle.Inflate(-1, -1);
+                    e.Graphics.DrawLine(frontPen, crossRectangle.Left, crossRectangle.Top, crossRectangle.Right, crossRectangle.Bottom);
+                    e.Graphics.DrawLine(frontPen, crossRectangle.Left, crossRectangle.Bottom, crossRectangle.Right, crossRectangle.Top);
                 }
             }
 
@@ -204,7 +204,7 @@ namespace PalmenIt.dntt.FormsFrontend
             }
             else
             {
-                _toastImage = toastIcon.ToBitmap(48, 48);
+                _toastImage = toastIcon.ToBitmap(32, 32);
             }
             _toastControl = new ToastControl(_toastImage)
             {
@@ -252,7 +252,7 @@ namespace PalmenIt.dntt.FormsFrontend
 
             var titleSize = TextRenderer.MeasureText(title, SystemFonts.CaptionFont);
             var textSize = TextRenderer.MeasureText(text, SystemFonts.DefaultFont);
-            var textPartHeight = titleSize.Height + textSize.Height + 28;
+            var textPartHeight = titleSize.Height + textSize.Height + 26;
             var textPartWidth = (titleSize.Width > textSize.Width ? titleSize.Width : textSize.Width) + 48;
             var imageWidth = _toastImage == null ? 0 : _toastImage.Size.Width + 12;
             var imageHeight = _toastImage == null ? 0 : _toastImage.Size.Height + 24;

@@ -11,6 +11,7 @@ namespace PalmenIt.dntt.FormsFrontend
         public TrayAppContext(ITrayApp app)
         {
             Application.ApplicationExit += (s, e) => Dispose();
+            app.Exit += (s, e) => Dispose();
             App = app;
             App.Show();
         }
