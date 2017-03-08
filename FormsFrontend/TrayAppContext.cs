@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace PalmenIt.dntt.FormsFrontend
 {
@@ -11,16 +10,9 @@ namespace PalmenIt.dntt.FormsFrontend
 
         public TrayAppContext(ITrayApp app)
         {
+            Application.ApplicationExit += (s, e) => Dispose();
             App = app;
-            App.Exit += App_Exit;
-            Application.ApplicationExit += App_Exit;
             App.Show();
-        }
-
-        private void App_Exit(object sender, EventArgs e)
-        {
-            App.Dispose();
-            ExitThread();
         }
 
         protected override void Dispose(bool disposing)
@@ -31,6 +23,7 @@ namespace PalmenIt.dntt.FormsFrontend
                 _disposed = true;
             }
             base.Dispose(disposing);
+            ExitThread();
         }
     }
 }

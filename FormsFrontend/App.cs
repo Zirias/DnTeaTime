@@ -1,5 +1,4 @@
 ﻿using PalmenIt.dntt.TeaTimer.Contracts;
-using System;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -19,8 +18,6 @@ namespace PalmenIt.dntt.FormsFrontend
         private readonly Icon _activeIcon;
 
         private bool _disposed = false;
-
-        public event EventHandler Exit;
 
         public App(ITeaTimerRepository timerRepository, ITeaTimerProcessor timerProcessor)
         {
@@ -67,7 +64,7 @@ namespace PalmenIt.dntt.FormsFrontend
 
         private void OnExit()
         {
-            Exit?.Invoke(this, new EventArgs());
+            Application.Exit();
         }
 
         private void SetIcon(Icon icon)
@@ -126,9 +123,10 @@ namespace PalmenIt.dntt.FormsFrontend
         {
             if (!_disposed)
             {
-                _notifyIcon.Dispose();
                 _setupForm.Dispose();
                 _aboutForm.Dispose();
+                _notification.Dispose();
+                _notifyIcon.Dispose();
                 _disposed = true;
             }
         }

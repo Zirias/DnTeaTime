@@ -61,6 +61,7 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
     <Compile Include="App.cs" />
+    <Compile Include="FormsToast.cs" />
     <Compile Include="IconExtensions.cs" />
     <Compile Include="InstalledCheck.cs" />
     <Compile Include="ITrayApp.cs" />

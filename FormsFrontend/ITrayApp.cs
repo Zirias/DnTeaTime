@@ -8,6 +8,5 @@ namespace PalmenIt.dntt.FormsFrontend
     internal interface ITrayApp : IDisposable
     {
         void Show();
-        event EventHandler Exit;
     }
 }
