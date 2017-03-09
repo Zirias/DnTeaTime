@@ -4,9 +4,9 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace PalmenIt.dntt.FormsFrontend
+namespace PalmenIt.Forms
 {
-    internal class FormsToast : IDisposable
+    public class ToastNotification : IDisposable
     {
         private class ToastControl : Control
         {
@@ -195,7 +195,7 @@ namespace PalmenIt.dntt.FormsFrontend
 
         private bool _disposed = false;
 
-        internal FormsToast(Icon toastIcon)
+        public ToastNotification(Icon toastIcon)
         {
             _syncContext = System.Threading.SynchronizationContext.Current;
             if (toastIcon == null)
@@ -204,7 +204,7 @@ namespace PalmenIt.dntt.FormsFrontend
             }
             else
             {
-                _toastImage = toastIcon.ToBitmap(32, 32);
+                _toastImage = toastIcon.ToBitmap(maxWidth: 32, minWidth: 32);
             }
             _toastControl = new ToastControl(_toastImage)
             {

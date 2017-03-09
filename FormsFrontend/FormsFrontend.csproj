@@ -28,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -61,10 +62,7 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
     <Compile Include="App.cs" />
-    <Compile Include="FormsToast.cs" />
-    <Compile Include="IconExtensions.cs" />
     <Compile Include="InstalledCheck.cs" />
-    <Compile Include="ITrayApp.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,7 +73,6 @@
     <Compile Include="SetupForm.Designer.cs">
       <DependentUpon>SetupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TrayAppContext.cs" />
     <Compile Include="VersionCheck.cs" />
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
@@ -112,6 +109,10 @@
     <ProjectReference Include="..\CoreTypes\CoreTypes.csproj">
       <Project>{BF562F15-A7BB-4288-8E76-C52A1F812A45}</Project>
       <Name>CoreTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Forms\Forms.csproj">
+      <Project>{f1d675dc-6c19-4204-8bdd-1378d0433a3b}</Project>
+      <Name>Forms</Name>
     </ProjectReference>
     <ProjectReference Include="..\TeaTimer.Contracts\TeaTimer.Contracts.csproj">
       <Project>{0aad60d6-8735-4eb6-9d30-716c65a7d650}</Project>

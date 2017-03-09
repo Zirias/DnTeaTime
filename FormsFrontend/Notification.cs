@@ -15,7 +15,7 @@ namespace PalmenIt.dntt.FormsFrontend
         private readonly NotifyIcon _notifyIcon;
         private readonly Icon _notificationIcon;
         private readonly Action<string, string> _notificationAction;
-        private readonly FormsToast _formsToast;
+        private readonly Forms.ToastNotification _formsToast;
 
         private const string APPUSERMODELID = "PalmenIt.DnTeaTime";
         private const string TOASTFORMAT = "<toast><visual><binding template=\"ToastImageAndText02\">"
@@ -36,7 +36,7 @@ namespace PalmenIt.dntt.FormsFrontend
             }
             else
             {
-                _formsToast = new FormsToast(notificationIcon);
+                _formsToast = new Forms.ToastNotification(notificationIcon);
                 _notificationAction = ShowFormsToastNotification;
             }
         }
@@ -46,7 +46,7 @@ namespace PalmenIt.dntt.FormsFrontend
             var imageFileName = CreateTempPng();
             try
             {
-                var image = _notificationIcon.ToBitmap(48, 48);
+                var image = _notificationIcon.ToBitmap(maxWidth: 32, minWidth: 32);
                 image.Save(imageFileName, ImageFormat.Png);
                 var toastXml = new XmlDocument();
                 toastXml.LoadXml(string.Format(TOASTFORMAT, imageFileName, title, text));
@@ -92,10 +92,6 @@ namespace PalmenIt.dntt.FormsFrontend
 
         private void ShowFormsToastNotification(string title, string text)
         {
-            var imageFileName = CreateTempPng();
-            var image = _notificationIcon.ToBitmap(48, 48);
-            image.Save(imageFileName, ImageFormat.Png);
-
             _formsToast.Show(title, text, 15000);
             SystemSounds.Beep.Play();
         }

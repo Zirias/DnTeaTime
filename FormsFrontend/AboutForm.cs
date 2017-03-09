@@ -11,7 +11,7 @@ namespace PalmenIt.dntt.FormsFrontend
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             InitializeComponent();
-            IconLabel.Image = icon.ToBitmap(0, 0);
+            IconLabel.Image = icon.ToBitmap(maxWidth: 256, minWidth: 48);
             TitleLabel.Text = "DnTeaTime v" + version.ToString(2);
             BuildInfoLabel.Text = "Build number " + version.ToString();
             FormClosing += (s, e) => { e.Cancel = true; Hide(); };

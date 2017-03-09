@@ -1,6 +1,7 @@
 ﻿using PalmenIt.dntt.TeaTimer.Contracts;
 using PalmenIt.dntt.TeaTimer.RegistryRepository;
 using PalmenIt.dntt.TeaTimer.STTimer;
+using PalmenIt.Forms;
 using System;
 using System.Threading;
 using System.Windows.Forms;
@@ -46,9 +47,7 @@ namespace PalmenIt.dntt.FormsFrontend
 
                 var processor = new TeaTimerProcessor();
 
-                var app = new App(repository, processor);
-
-                Application.Run(new TrayAppContext(app));
+                TrayApp.Run(new App(repository, processor));
             }
         }
     }

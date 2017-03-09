@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Setup", "Setup\Setup.wixproj", "{D6CECB92-06F9-4018-A1F4-A3E1F5F11B33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forms", "Forms\Forms.csproj", "{F1D675DC-6C19-4204-8BDD-1378D0433A3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,14 @@ Global
 		{D6CECB92-06F9-4018-A1F4-A3E1F5F11B33}.Release|Any CPU.ActiveCfg = Release|x86
 		{D6CECB92-06F9-4018-A1F4-A3E1F5F11B33}.Release|x86.ActiveCfg = Release|x86
 		{D6CECB92-06F9-4018-A1F4-A3E1F5F11B33}.Release|x86.Build.0 = Release|x86
+		{F1D675DC-6C19-4204-8BDD-1378D0433A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1D675DC-6C19-4204-8BDD-1378D0433A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1D675DC-6C19-4204-8BDD-1378D0433A3B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F1D675DC-6C19-4204-8BDD-1378D0433A3B}.Debug|x86.Build.0 = Debug|Any CPU
+		{F1D675DC-6C19-4204-8BDD-1378D0433A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1D675DC-6C19-4204-8BDD-1378D0433A3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1D675DC-6C19-4204-8BDD-1378D0433A3B}.Release|x86.ActiveCfg = Release|Any CPU
+		{F1D675DC-6C19-4204-8BDD-1378D0433A3B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
